@@ -1,0 +1,189 @@
+{
+	"info": {
+		"_postman_id": "33f7af8d-d990-46a7-8677-6e2e502a07b9",
+		"name": "ToDo List API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44299461",
+		"_collection_link": "https://irfanaz-zahran.postman.co/workspace/TaskMe-QA-API-Testing~ca6eda70-1fa0-45a8-9aeb-b85bccecb7d2/collection/44299461-33f7af8d-d990-46a7-8677-6e2e502a07b9?action=share&source=collection_link&creator=44299461"
+	},
+	"item": [
+		{
+			"name": "All Todo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Fixed syntax \r",
+							"pm.test(\"Status code is 200\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Response is array\", () => {\r",
+							"    pm.expect(pm.response.json()).to.be.an('array');\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/todos",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"todos"
+					]
+				},
+				"description": "This endpoint makes an HTTP GET request to retrieve a list of todos. The request does not include a request body, and the response is in JSON format with a status code of 200. The response body contains an array of todo objects, each with properties for userId, id, title, and completed status."
+			},
+			"response": []
+		},
+		{
+			"name": "Create Todo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", () => {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"pm.test(\"Response has title\", () => {\r",
+							"    const res = pm.response.json();\r",
+							"    pm.expect(res.title).to.eql(\"Belajar Postman\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": 1,\r\n    \"title\": \"Belajar Postman\",\r\n    \"completed\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/todos",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"todos"
+					]
+				},
+				"description": "### Create a New Todo\n\nThis endpoint allows you to create a new todo item.\n\n#### Request Body\n\n- `userId` (number) - The ID of the user for whom the todo item is being created.\n    \n- `title` (string) - The title of the todo item.\n    \n- `completed` (boolean) - Indicates whether the todo item is completed or not.\n    \n\nExample:\n\n``` json\n{\n  \"userId\": 1,\n  \"title\": \"Belajar Postman\",\n  \"completed\": false\n}\n\n ```\n\n#### Response\n\n- Status: 201 Created\n    \n- Content-Type: application/json\n    \n\nExample Response Body:\n\n``` json\n{\n  \"userId\": 0,\n  \"title\": \"\",\n  \"completed\": true,\n  \"id\": 0\n}\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "Todo Update",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Completed is true\", () => {\r",
+							"    pm.expect(pm.response.json().completed).to.eql(true);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"completed\": true\r\n}"
+				},
+				"url": {
+					"raw": "{{baseURL}}/todos/1",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"todos",
+						"1"
+					]
+				},
+				"description": "### Update Todo Status\n\nThis endpoint is used to update the status of a specific todo item.\n\n#### Request\n\n- Method: PATCH\n    \n- Endpoint: `{{baseURL}}/todos/1`\n    \n- { \"completed\": true}\n    \n\n#### Response\n\nThe response is in JSON format and includes the updated todo item with the following properties:\n\n- `userId` (number): The user ID associated with the todo item.\n    \n- `id` (number): The unique ID of the todo item.\n    \n- `title` (string): The title of the todo item.\n    \n- `completed` (boolean): The updated status of the todo item.\n    \n\n``` json\n{\n  \"type\": \"object\",\n  \"properties\": {\n    \"userId\": {\n      \"type\": \"number\"\n    },\n    \"id\": {\n      \"type\": \"number\"\n    },\n    \"title\": {\n      \"type\": \"string\"\n    },\n    \"completed\": {\n      \"type\": \"boolean\"\n    }\n  }\n}\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Todo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{baseURL}}/todos/1",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"todos",
+						"1"
+					]
+				},
+				"description": "The endpoint sends an HTTP DELETE request to delete a specific todo item with ID 1.\n\n### Response\n\nThe response is a JSON object with an HTTP status code of 200 and an empty body.\n\n``` json\n{}\n\n ```"
+			},
+			"response": []
+		}
+	]
+}
